@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 # CRUD Endpoints
-@router.post("/coffees/")
+@router.post("/")
 def create_coffee(
     coffeeName: str = Form(...),
     coffeeType: str = Form(...),
@@ -47,13 +47,13 @@ def create_coffee(
     coffee_obj.save()
     return coffee_obj
 
-@router.get("/coffees/")
+@router.get("/")
 def list_coffees():
     coffees = Coffee.all() # Fetch all records
     
     return coffees.to_dict()
 
-@router.get("/coffees/{coffee_id}")
+@router.get("/{coffee_id}")
 def get_coffee(coffee_id: int):
     coffee = Coffee.get(id=coffee_id)
     if not coffee:
@@ -61,7 +61,7 @@ def get_coffee(coffee_id: int):
     coffee_dict = coffee.__dict__
     coffee_dict["image"] = f"/uploads/{os.path.basename(coffee_dict['image'])}"
     return coffee_dict
-@router.put("/coffees/{coffee_id}", response_model=CoffeeResponse)
+@router.put("/{coffee_id}", response_model=CoffeeResponse)
 def update_coffee(
     coffee_id: int,
     coffeeName: Optional[str] = None,
@@ -119,7 +119,7 @@ def update_coffee(
     coffee_dict["image"] = f"/uploads/{os.path.basename(coffee_dict.get('image', ''))}"
     return CoffeeResponse(**coffee_dict)
 
-@router.delete("/coffees/{coffee_id}", response_model=dict)
+@router.delete("/{coffee_id}", response_model=dict)
 def delete_coffee(coffee_id: int):
     coffee = Coffee.get(id=coffee_id)
     if not coffee:
