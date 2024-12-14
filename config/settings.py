@@ -4,15 +4,13 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
+from config.events import lifespan
+
 load_dotenv()
 
-# Initialize FastAPI app
-db_conf = {
-    'db_name': "coffee.db"
-}
 
 # Application 
-app = FastAPI(title="Coffee Shop")
+app = FastAPI(title="Coffee Shop", lifespan=lifespan)
 
 
 # Mount uploads file for coffee images

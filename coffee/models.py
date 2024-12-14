@@ -2,7 +2,7 @@ from abarorm.fields import sqlite
 from abarorm import SQLiteModel
 
 
-from config.settings import db_conf
+from config.db import db_conf
 
 
 # SQLiteModel for Coffee
