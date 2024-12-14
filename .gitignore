@@ -1,0 +1,17 @@
+# python Chach files
+__pycache__
+*/__pycache__
+*/*/__pycache__
+
+# virtualenv
+.venv
+venv
+.env
+env
+
+# media file
+uploads
+
+# database file
+*.db
+coffee.db

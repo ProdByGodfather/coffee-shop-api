@@ -1,0 +1,6 @@
+from datetime import timedelta
+
+SECRET_KEY = "The_GodFather"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 720
+REFRESH_TOKEN_EXPIRE_DAYS = 7
