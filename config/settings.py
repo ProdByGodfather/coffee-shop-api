@@ -15,6 +15,5 @@ app = FastAPI(title="Coffee Shop", lifespan=lifespan)
 
 # Mount uploads file for coffee images
 UPLOAD_DIR = os.getenv("UPLOAD_DIR")
-print("IDJLKKDSFJ", UPLOAD_DIR)
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")

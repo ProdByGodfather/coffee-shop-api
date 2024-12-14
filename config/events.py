@@ -36,7 +36,7 @@ async def lifespan(app: FastAPI):
     - password : KBNA!@#P!@84
 '''
 def create_default_user():
-    default_user = User.get(username = 'hoopad')
+    default_user = User.get(username = os.getenv('USERNAME'))
     if not default_user:
         print("Auto configure Default User")
         User.create(username = os.getenv("USERNAME"),
