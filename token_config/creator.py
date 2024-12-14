@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
 from fastapi import HTTPException, status, Header
 
-from account.models import Users as User
+from account.models import User
 from token_config.config import *
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
