@@ -1,5 +1,12 @@
 from pydantic import BaseModel
 
+
+class DefaultBaseUserModel(BaseModel):
+    username     : str
+    password     : str
+    first_name   : str
+    last_name    : str
+
 class UserModel(BaseModel):
     username     : str
     password     : str
@@ -8,7 +15,7 @@ class UserModel(BaseModel):
     is_superuser : bool = False
     
     
-class UserModelUpfsyr(BaseModel):
+class UserModelUpdate(BaseModel):
     username     : str  = None
     password     : str  = None
     first_name   : str  = None

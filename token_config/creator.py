@@ -42,9 +42,3 @@ def retrive_user(
     return user.__dict__
 
 
-def retrive_user_grpc(client_code: str) -> dict:
-    user = verify_access_token(client_code)
-    user = User.get(username = user)
-    if not user:
-        return False
-    return user.__dict__
