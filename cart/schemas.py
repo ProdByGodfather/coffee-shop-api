@@ -6,5 +6,4 @@ class CartModel(BaseModel):
     count  : int = 1
     
 class CartUpdateModel(BaseModel):
-    coffee : int = None
     count  : int = None

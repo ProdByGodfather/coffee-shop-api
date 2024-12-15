@@ -28,3 +28,29 @@ def create_cart(user = Depends(retrive_user), data : CartModel = CartModel):
         return HTTPException(status_code=422, detail=f"Error: {e}")
     
     return HTTPException(status_code=201, detail="Cart Item Created")
+
+@router.get("/")
+def list_cart(user = Depends(retrive_user)):
+    carts = Cart.filter(user = user['id'])
+    return HTTPException(status_code=200, detail=carts.to_dict())
+
+
+@router.put("/{id}")
+def update_cart_count(user = Depends(retrive_user), id = int, data : CartUpdateModel = CartUpdateModel):
+    data = data.model_dump(exclude_unset=True)
+    cart = Cart.get(id = id, user = user['id'])
+    if not cart:
+        return HTTPException(status_code=404, detail="This Cart Does not exists.")
+    
+    if 'count' in data:
+        cart.count = data['count']
+    cart.save()
+    return HTTPException(status_code=200, detail="Data Successfully updated.")
+    
+@router.delete('/{id}')
+def delete_cart(user = Depends(retrive_user), id = int):
+    cart = Cart.get(id = id, user = user['id'])
+    if not cart:
+        return HTTPException(status_code=404, detail="This Cart Does not exists.")
+    Cart.delete(id = cart.id)
+    return HTTPException(status_code=402, detail="Cart Deleted.")
