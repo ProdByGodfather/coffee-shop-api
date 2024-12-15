@@ -106,7 +106,7 @@ def create_super_user(user = Depends(retrive_user), data: DefaultBaseUserModel =
                     password = hash_password(data['password']),
                     first_name = data['first_name'],
                     last_name = data['last_name'],
-                    is_superuser = False)
+                    is_superuser = True)
     except Exception as e:
         return HTTPException(status_code=422 ,detail=f"Error: {e}")
     return HTTPException(status_code=201, detail=f"User {data['username']} successfully created.")
