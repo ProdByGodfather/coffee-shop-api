@@ -11,3 +11,6 @@ class Cart(SQLiteModel):
     coffee = sqlite.ForeignKey(Coffee, on_delete='CASCADE')
     count = sqlite.IntegerField()
     
+    class Meta:
+        db_config = db_conf
+    
