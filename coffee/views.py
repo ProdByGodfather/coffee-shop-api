@@ -1,17 +1,18 @@
 import os
 
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
 
 from coffee.models import Coffee
 from coffee.schemas import *
 from config.settings import UPLOAD_DIR
+from token_config.creator import retrive_user
 
 router = APIRouter()
 
 
 # CRUD Endpoints
 @router.post("/")
-def create_coffee(
+def create_coffee(user = Depends(retrive_user), 
     coffeeName: str = Form(...),
     coffeeType: str = Form(...),
     rate: float = Form(...),
@@ -24,6 +25,9 @@ def create_coffee(
     coffeeAddress: str = Form(...),
     image: UploadFile = File(...)
 ):
+    if user['is_superuser'] == False:
+        return HTTPException(status_code=403, detail="you can not access to this url")
+    
     # Save the uploaded image
     image_path = os.path.join(UPLOAD_DIR, image.filename)
     with open(image_path, "wb") as f:
@@ -64,6 +68,7 @@ def get_coffee(coffee_id: int):
 @router.put("/{coffee_id}", response_model=CoffeeResponse)
 def update_coffee(
     coffee_id: int,
+    user = Depends(retrive_user),
     coffeeName: Optional[str] = None,
     coffeeType: Optional[str] = None,
     rate: Optional[float] = None,
@@ -75,7 +80,10 @@ def update_coffee(
     coffeeShopLocation: Optional[str] = None,
     coffeeAddress: Optional[str] = None,
     image: Optional[UploadFile] = None,
+    
 ):
+    if user['is_superuser'] == False:
+        return HTTPException(status_code=403, detail="you can not access to this url")
     
     # Fetch coffee instance
     coffee = Coffee.get(id=coffee_id)
@@ -120,8 +128,12 @@ def update_coffee(
     return CoffeeResponse(**coffee_dict)
 
 @router.delete("/{coffee_id}", response_model=dict)
-def delete_coffee(coffee_id: int):
+def delete_coffee(coffee_id: int, user = Depends(retrive_user)):
     coffee = Coffee.get(id=coffee_id)
+    
+    if user['is_superuser'] == False:
+        return HTTPException(status_code=403, detail="you can not access to this url")
+    
     if not coffee:
         raise HTTPException(status_code=404, detail="Coffee not found")
 
