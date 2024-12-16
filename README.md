@@ -37,7 +37,7 @@ This project has only educational and evaluation value and probably does not wor
 ## Setup and Installation
 
 ### Prerequisites
-- Python 3.10 or higher
+- Python 3.8 or higher
 
 ### Installation Steps
 1. Clone the repository:
