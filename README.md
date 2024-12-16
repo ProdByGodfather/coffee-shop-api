@@ -2,6 +2,8 @@
 
 This is a **FastAPI** project that serves as the backend for a coffee shop application. The project includes account management, token-based authentication using **JWT**, and CRUD operations for coffee and cart management. The [**AbarORM**](https://prodbygodfather.github.io/abarorm/) library is used as the ORM with **SQLite** as the database.
 
+This project has only educational and evaluation value and probably does not work as a powerful and complete project.
+
 ---
 
 
