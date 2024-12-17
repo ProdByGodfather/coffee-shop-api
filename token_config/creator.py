@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
-from fastapi import HTTPException, status, Header
+from fastapi import HTTPException, status, Header, Request
 
 from account.models import User
 from token_config.config import *
@@ -26,19 +26,51 @@ def verify_access_token(token: str):
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
-def retrive_user(
+
+async def retrive_user(
     token: str = Header(
-        default="Bearer ",
+        default=None,  # پیش‌فرض برای هدر "Authorization"
         convert_underscores=False,
-        description="JWT in the header"
-    )
+        description="JWT in the Authorization header"
+    ),
+    request: Request = None  # دریافت درخواست (Request) برای استفاده از پارامترهای query یا body
 ):
-    auth_key = token[7:]
+    # ابتدا تلاش می‌کنیم توکن را از هدر بگیریم
+    if not token or token == "Bearer ":
+        # اگر توکن در هدر نبود، از بدنه درخواست استفاده می‌کنیم
+        body = await request.json()  # نیاز به await برای دریافت body به‌صورت async
+        token_from_request = body.get("token")  # توکن را از body دریافت می‌کنیم
+        if not token_from_request:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token missing in both Authorization header and request body"
+            )
+        token = token_from_request
+
+    # جدا کردن مقدار توکن از Bearer
+    if token.startswith("Bearer "):
+        auth_key = token[len("Bearer "):].strip()
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token must be prefixed with 'Bearer '"
+        )
+
+    if not auth_key:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token is missing after 'Bearer '"
+        )
+
+    # تأیید اعتبار توکن
     user = verify_access_token(auth_key)
-    is_user = User.get(username = user)
+
+    # بررسی وجود کاربر در پایگاه داده
+    is_user = User.get(username=user)
     if not is_user:
-        raise HTTPException(401, "Can't access to this section")
-    user = User.get(username = user)
-    return user.__dict__
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User not authorized to access this section"
+        )
 
-
+    return is_user.__dict__
