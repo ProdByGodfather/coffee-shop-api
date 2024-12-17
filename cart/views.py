@@ -38,6 +38,7 @@ def list_cart(user = Depends(retrive_user)):
         try:
             coffee = Coffee.get(id = i['coffee'])
             price += coffee.price
+            i['coffee'] = coffee
             
         except Exception as e:
             print(f"ERROR: {e}")
