@@ -32,7 +32,20 @@ def create_cart(user = Depends(retrive_user), data : CartModel = CartModel):
 @router.get("/")
 def list_cart(user = Depends(retrive_user)):
     carts = Cart.filter(user = user['id'])
-    return HTTPException(status_code=200, detail=carts.to_dict())
+    cart_dict = carts.to_dict()
+    price = 0
+    for i in cart_dict:
+        try:
+            coffee = Coffee.get(id = i['coffee'])
+            price += coffee.price
+            
+        except Exception as e:
+            print(f"ERROR: {e}")
+    context = {
+        "data" : cart_dict,
+        "price" : price
+    }
+    return HTTPException(status_code=200, detail=context)
 
 
 @router.put("/{id}")
