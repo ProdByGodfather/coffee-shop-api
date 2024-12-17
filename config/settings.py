@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from starlette.middleware.cors import CORSMiddleware
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -11,6 +12,14 @@ load_dotenv()
 
 # Application 
 app = FastAPI(title="Coffee Shop", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"], 
+    allow_headers=["*"],  
+)
 
 
 # Mount uploads file for coffee images
