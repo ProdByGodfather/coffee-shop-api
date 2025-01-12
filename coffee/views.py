@@ -23,7 +23,8 @@ def create_coffee(user = Depends(retrive_user),
     buyCount: int = Form(...),
     coffeeShopLocation: str = Form(...),
     coffeeAddress: str = Form(...),
-    image: UploadFile = File(...)
+    image: UploadFile = File(...),
+    coffeeSize: str = Form(...)
 ):
     if user['is_superuser'] == False:
         return HTTPException(status_code=403, detail="you can not access to this url")
@@ -46,6 +47,7 @@ def create_coffee(user = Depends(retrive_user),
         "coffeeShopLocation": coffeeShopLocation,
         "coffeeAddress": coffeeAddress,
         "image": image_path,
+        "coffeeSize": coffeeSize
     }
     coffee_obj = Coffee(**coffee_data)
     coffee_obj.save()
@@ -80,6 +82,7 @@ def update_coffee(
     coffeeShopLocation: Optional[str] = None,
     coffeeAddress: Optional[str] = None,
     image: Optional[UploadFile] = None,
+    coffeeSize: Optional[str] = None
     
 ):
     if user['is_superuser'] == False:
@@ -111,6 +114,8 @@ def update_coffee(
         coffee.coffeeShopLocation = coffeeShopLocation
     if coffeeAddress is not None:
         coffee.coffeeAddress = coffeeAddress
+    if coffeeSize is not None:
+        coffee.coffeeSize = coffeeSize
 
     # Handle image if provided
     if image:
