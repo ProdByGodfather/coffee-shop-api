@@ -143,3 +143,18 @@ def delete_coffee(coffee_id: int, user = Depends(retrive_user)):
 
     Coffee.delete(id = coffee_id)
     return {"detail": "Coffee deleted successfully"}
+
+@router.post("/like/{coffee_id}")
+def like_coffee(coffee_id: int, user = Depends(retrive_user)):
+    coffee = Coffee.get(id=coffee_id)
+    if not coffee:
+        raise HTTPException(status_code=404, detail="Coffee not found")
+    
+    if coffee.isLiked == True:
+        coffee.isLiked = False
+        coffee.save()
+        return {"detail": "isLiked is False"}   
+    else:
+        coffee.isLiked = True
+        coffee.save()
+        return {"detail": "isLiked is True"}   
