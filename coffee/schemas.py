@@ -13,6 +13,7 @@ class CoffeeBase(BaseModel):
     buyCount: int
     coffeeShopLocation: str
     coffeeAddress: str
+    coffeeSize : str
 
 class CoffeeCreate(CoffeeBase):
     pass
@@ -28,6 +29,7 @@ class CoffeeUpdate(BaseModel):
     buyCount: Optional[int]
     coffeeShopLocation: Optional[str]
     coffeeAddress: Optional[str]
+    coffeeSize: Optional[str]
 
 class CoffeeResponse(CoffeeBase):
     id: int

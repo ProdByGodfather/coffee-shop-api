@@ -18,6 +18,7 @@ class Coffee(SQLiteModel):
     buyCount = sqlite.IntegerField()
     coffeeShopLocation = sqlite.CharField(max_length=1000)
     coffeeAddress = sqlite.CharField()
+    coffeeSize = sqlite.CharField(max_length=10)
 
     class Meta:
         db_config = db_conf
